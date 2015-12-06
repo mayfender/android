@@ -5,7 +5,7 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.view.Window;
 
-import com.may.ple.parking.gateway.activity.R;
+import com.may.ple.android.activity.R;
 
 public class ProgressDialogSpinner {
 	private Dialog dialog;

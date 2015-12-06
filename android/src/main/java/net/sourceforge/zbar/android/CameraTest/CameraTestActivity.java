@@ -26,7 +26,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.may.ple.parking.gateway.activity.R;
+import com.may.ple.android.activity.R;
 /* Import ZBar Class files */
 
 public class CameraTestActivity extends Activity {

@@ -3,7 +3,7 @@ package com.may.ple.android.activity.setting;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
-import com.may.ple.parking.gateway.activity.R;
+import com.may.ple.android.activity.R;
 
 public class PreferenceActivitySetting extends PreferenceActivity {
 	

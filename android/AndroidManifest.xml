@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.may.ple.parking.gateway.activity"
+    package="com.may.ple.android.activity"
     android:versionCode="1"
     android:versionName="1.0-SNAPSHOT" >
 
@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
-        android:name="com.may.ple.parking.gateway.activity.ApplicationScope"
+        android:name="com.may.ple.android.activity.ApplicationScope"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"

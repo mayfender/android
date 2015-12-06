@@ -21,12 +21,6 @@ import com.may.ple.android.activity.service.CenterService;
 import com.may.ple.android.activity.service.RestfulCallback;
 import com.may.ple.android.activity.setting.PreferenceActivitySetting;
 import com.may.ple.android.activity.utils.handler.ErrorHandler;
-import com.may.ple.parking.gateway.activity.R;
-import com.may.ple.parking.gateway.activity.R.anim;
-import com.may.ple.parking.gateway.activity.R.id;
-import com.may.ple.parking.gateway.activity.R.layout;
-import com.may.ple.parking.gateway.activity.R.menu;
-import com.may.ple.parking.gateway.activity.R.string;
 
 public class LoginActivity extends SherlockActivity implements OnClickListener, RestfulCallback {
 	private Integer selectedGate;

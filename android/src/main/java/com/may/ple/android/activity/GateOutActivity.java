@@ -25,9 +25,6 @@ import com.may.ple.android.activity.service.CenterService;
 import com.may.ple.android.activity.service.RestfulCallback;
 import com.may.ple.android.activity.utils.constant.SettingKey;
 import com.may.ple.android.activity.utils.handler.ErrorHandler;
-import com.may.ple.parking.gateway.activity.R;
-import com.may.ple.parking.gateway.activity.R.id;
-import com.may.ple.parking.gateway.activity.R.layout;
 
 public class GateOutActivity extends SherlockActivity implements RestfulCallback {
 	private int reasonNoScan;

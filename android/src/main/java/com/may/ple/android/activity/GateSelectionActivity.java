@@ -6,9 +6,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.actionbarsherlock.app.SherlockActivity;
-import com.may.ple.parking.gateway.activity.R;
-import com.may.ple.parking.gateway.activity.R.id;
-import com.may.ple.parking.gateway.activity.R.layout;
 
 public class GateSelectionActivity extends SherlockActivity implements OnClickListener {
 	

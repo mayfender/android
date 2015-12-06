@@ -8,8 +8,8 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
+import com.may.ple.android.activity.R;
 import com.may.ple.android.activity.utils.constant.SettingKey;
-import com.may.ple.parking.gateway.activity.R;
 
 public class PreferenceFragmentSetting extends PreferenceFragment implements OnPreferenceChangeListener {
 	

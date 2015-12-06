@@ -13,16 +13,10 @@ import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.actionbarsherlock.app.SherlockActivity;
-import com.may.ple.parking.gateway.activity.R;
-import com.may.ple.parking.gateway.activity.R.id;
-import com.may.ple.parking.gateway.activity.R.layout;
-import com.may.ple.parking.gateway.activity.R.string;
 
 
 public class BarcodeScanner extends SherlockActivity {

@@ -1,0 +1,13 @@
+1. On setting page would like to create new field to separate ip and port.
+2. For Qr-code reader my friend Vi suggest to use ZXING lib
+
+-------: Zxing
+http://www.mysamplecode.com/2011/09/android-barcode-scanner-using-zxing.html
+http://www.mysamplecode.com/2012/09/android-generate-qr-code-using-zxing.html
+http://crunchify.com/java-simple-qr-code-generator-example/
+http://www.lihongfei.com/integrate-zxing-in-android-studio/
+http://michalu.eu/wordpress/scanning-and-generating-barcodes-using-zxing-library-on-android/
+
+--------: Zbar
+http://www.raviyp.com/android/181-best-bar-code-qr-code-scanner-library-for-using-in-android
+http://kvenkataprasad.blogspot.in/2015/01/bar-code-and-qr-code-scanner-example.html

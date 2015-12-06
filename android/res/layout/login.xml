@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  xmlns:tools="http://schemas.android.com/tools"
+			  android:layout_width="match_parent"
+			  android:layout_height="match_parent"
+			  android:orientation="vertical"
+			  android:gravity="center"
+			  android:paddingLeft="@dimen/activity_horizontal_margin"
+			  android:paddingRight="@dimen/activity_horizontal_margin">
+			  
+        <!-- <ImageView android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_marginBottom="40dp"
+                   android:src="@drawable/system_name" /> -->
+    
+	    <EditText android:layout_width="match_parent"
+	        	  android:id="@+id/user_name"
+	        	  android:hint="@string/user_name"
+	        	  android:inputType="text"
+	        	  android:textColorHint="#D2D2D2"
+	        	  android:textColor="#000000"
+	        	  android:layout_marginBottom="15dp"
+	              android:layout_height="wrap_content" />
+    
+	    <EditText android:layout_width="match_parent"
+	        	  android:id="@+id/password"
+	        	  android:hint="@string/pass"
+	        	  android:textColorHint="#D2D2D2"
+	        	  android:inputType="textPassword"
+	        	  android:textColor="#000000"
+	        	  android:layout_marginBottom="15dp"
+	              android:layout_height="wrap_content" />
+	    
+	    <RadioGroup
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:gravity="center"
+		    android:orientation="horizontal">
+		    <RadioButton android:id="@+id/checkIn"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="@string/login_radio_car_in"
+		        android:textColor="#FFFFFF"
+		        android:onClick="onRadioButtonClicked"/>
+		    <RadioButton android:id="@+id/checkOut"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="@string/login_radio_car_out"
+		        android:textColor="#FFFFFF"
+		        android:onClick="onRadioButtonClicked"/>
+		</RadioGroup>
+    
+	    <Button android:layout_width="match_parent"
+	        	android:layout_height="wrap_content"
+	        	android:id="@+id/login_button"
+	        	android:textColor="#FFFFFF"
+	        	android:text="@string/login_button" />
+
+</LinearLayout>

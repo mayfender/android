@@ -1,0 +1,1 @@
+mvn archetype:generate -DarchetypeArtifactId=android-quickstart -DarchetypeGroupId=de.akquinet.android.archetypes -DarchetypeVersion=1.0.11 -DgroupId=com.may.ple.parking -DartifactId=parking-gateway -DinteractiveMode=false

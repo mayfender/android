@@ -1,0 +1,135 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  xmlns:tools="http://schemas.android.com/tools"
+			  android:layout_width="match_parent"
+			  android:layout_height="match_parent"
+			  android:orientation="vertical"
+			  android:gravity="center"
+			  android:paddingLeft="@dimen/activity_horizontal_margin"
+			  android:paddingRight="@dimen/activity_horizontal_margin">
+			  
+    <TextView 
+	        android:id="@+id/show"
+	        android:gravity="center"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:textStyle="bold"
+	        android:textSize="55sp"
+	        android:textColor="#FFFFFF"
+	        android:background="@drawable/text_show"
+	        android:layout_gravity="fill" />
+    
+    
+	<GridLayout
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center"
+	    android:columnCount="3"
+	    android:orientation="horizontal" >
+	
+	    <Button
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" 
+	        android:padding="35dp"
+	        android:textStyle="bold"
+	        android:onClick="onClick"
+	        android:textSize="30sp"
+	        android:textColor="#FFFFFF"
+	        android:text="1" />
+	    <Button 
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" 
+	        android:padding="35dp"
+	        android:textStyle="bold"
+	        android:onClick="onClick"
+	        android:textSize="30sp"
+	        android:textColor="#FFFFFF"
+	        android:text="2" />
+	    <Button 
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" 
+	        android:padding="35dp"
+	        android:textStyle="bold"
+	        android:onClick="onClick"
+	        android:textSize="30sp"
+	        android:textColor="#FFFFFF"
+	        android:text="3" />
+	    <Button 
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" 
+	        android:padding="35dp"
+	        android:textStyle="bold"
+	        android:onClick="onClick"
+	        android:textSize="30sp"
+	        android:textColor="#FFFFFF"
+	        android:text="4" />
+	    <Button
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"  
+	        android:padding="35dp"
+	        android:textStyle="bold"
+	        android:onClick="onClick"
+	        android:textSize="30sp"
+	        android:textColor="#FFFFFF"
+	        android:text="5" />
+	    <Button 
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" 
+	        android:padding="35dp"
+	        android:textStyle="bold"
+	        android:onClick="onClick"
+	        android:textSize="30sp"
+	        android:textColor="#FFFFFF"
+	        android:text="6" />
+	    <Button 
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" 
+	        android:padding="35dp"
+	        android:textStyle="bold"
+	        android:onClick="onClick"
+	        android:textSize="30sp"
+	        android:textColor="#FFFFFF"
+	        android:text="7" />
+	    <Button
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"  
+	        android:padding="35dp"
+	        android:textStyle="bold"
+	        android:onClick="onClick"
+	        android:textSize="30sp"
+	        android:textColor="#FFFFFF"
+	        android:text="8" />
+	    <Button
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"  
+	        android:padding="35dp"
+	        android:textStyle="bold"
+	        android:onClick="onClick"
+	        android:textSize="30sp"
+	        android:textColor="#FFFFFF"
+	        android:text="9" />
+	    <Button
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"  
+	        android:layout_gravity="fill"
+	        android:padding="35dp"
+	        android:textStyle="bold"
+	        android:onClick="onClick"
+	        android:textSize="30sp"
+	        android:textColor="#FFFFFF"
+	        android:text="0" />
+	    <Button
+	        android:id="@+id/delete"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"  
+	        android:layout_gravity="fill"
+	        android:layout_columnSpan="2"
+	        android:padding="35dp"
+	        android:textStyle="bold"
+	        android:onClick="onClick"
+	        android:textSize="30sp"
+	        android:textColor="#FFFFFF"
+	        android:text="ลบ" />
+	
+	</GridLayout>
+
+</LinearLayout>

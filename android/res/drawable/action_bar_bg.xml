@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- <item android:drawable="@drawable/testing" /> -->
+    <item>
+        <bitmap android:src="@drawable/bg_repeat"
+			    android:tileMode="repeat"
+			    android:dither="true" />
+    </item>
+    
+    <item>
+	    <shape android:shape="rectangle">
+			<gradient android:centerColor="#AA4D4D4D" android:startColor="#000000" android:endColor="#000000" android:angle="90"  />
+			<stroke android:width="0px" android:color="#FFFFC435" />
+		</shape>
+    </item>
+
+    <!-- <item>
+	    <shape android:shape="rectangle">
+			<gradient android:centerColor="#FFFFC435" android:type="radial" android:gradientRadius="30" 
+			          android:centerY="0.5" android:centerX="0.95" />
+		</shape>
+    </item> -->
+</layer-list>

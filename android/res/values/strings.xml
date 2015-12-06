@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Android Client</string>
+    <string name="action_settings">Settings</string>
+    <string name="user_name">ชื่อผู้ใช้</string>
+    <string name="pass">รหัสผ่าน</string>
+    <string name="login_button">เข้าสู่ระบบ</string>
+    <string name="login_radio_car_in">Gate-in</string>
+    <string name="login_radio_car_out">Gate-out</string>
+    
+    <!-- message -->
+    <string name="please_select_gate">กรุณาเลือก Gate</string>
+    <string name="please_fill_username">กรุณากรอก ชื่อผู้ใช้</string>
+    <string name="please_fill_password">กรุณากรอก รหัสผ่าน</string>
+    
+</resources>

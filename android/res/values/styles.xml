@@ -1,0 +1,90 @@
+<resources>
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+    
+    
+     <!-- the theme applied to the application or activity -->
+    <style name="CustomTheme" parent="@style/Theme.Sherlock.Light.DarkActionBar">
+        <!-- <item name="android:actionBarStyle">@style/MyActionBar</item> -->
+        <item name="android:editTextStyle">@style/EditTextStyle</item>
+        <item name="android:typeface">monospace</item>
+        <item name="android:windowBackground">@drawable/login_bg</item>
+        <item name="android:actionBarTabStyle">@style/MyActionBarTabStyle</item>
+        <item name="android:actionBarTabBarStyle">@style/MyActionBarTabBarStyle</item>
+	    <item name="android:actionBarTabTextStyle">@style/MyActionBarTabTextStyle</item>
+    </style>
+    
+    
+    <style name="MyActionBarTabStyle" parent="@style/Widget.Sherlock.ActionBar.TabView">
+        <item name="android:background">@drawable/tab_view_bg</item>
+    </style>
+    <style name="MyActionBarTabBarStyle" parent="@style/Widget.Sherlock.ActionBar.TabBar">
+        <item name="android:background">@drawable/tab_bar_bg</item>
+    </style>
+    <style name="MyActionBarTabTextStyle" parent="@style/Widget.Sherlock.ActionBar.TabText">
+        <item name="android:textColor">@color/tab_bar_text_color</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    
+    
+    
+
+    <!-- ActionBar styles -->
+    <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@drawable/action_bar_bg</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:titleTextStyle">@style/MyTitleBar</item>
+    </style>
+    
+    <style name="MyTitleBar" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+    	<item name="android:textColor">@color/action_bar_text_color_1</item>
+    	<!-- <item name="android:textStyle">bold</item> -->
+    	<item name="android:textSize">20sp</item>
+    </style>
+    
+    <style name="EditTextStyle" parent="@android:style/Widget.EditText">
+    	<item name="android:background">@drawable/edittext_bg_list</item>
+    	<item name="android:padding">6dp</item>
+    	<item name="android:textCursorDrawable">@drawable/edittext_cursor_color</item>
+    	<!-- <item name="android:textSize">30sp</item> -->
+    </style>
+    
+    
+    <!-- the theme applied to the Dialog -->
+    <style name="CustomDialogTheme" parent="@android:style/Theme.DeviceDefault.Dialog">
+        <item name="android:typeface">monospace</item>
+    </style>
+    
+    
+    
+    <!-- POPUP Theme -->
+    <style name="CustomPopupTheme" parent="@android:style/Theme.DeviceDefault.Dialog">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="android:editTextStyle">@style/EditTextStyle</item>
+        <item name="android:typeface">monospace</item>
+    </style>
+    
+    <style name="CustomPopupThemeWithActionBar" parent="@android:style/Theme.DeviceDefault.Dialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowSoftInputMode">stateAlwaysVisible</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+</resources>

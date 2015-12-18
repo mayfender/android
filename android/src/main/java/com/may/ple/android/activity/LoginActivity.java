@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -20,10 +19,8 @@ import com.may.ple.android.activity.dialog.ProgressDialogSpinner;
 import com.may.ple.android.activity.service.CenterService;
 import com.may.ple.android.activity.service.RestfulCallback;
 import com.may.ple.android.activity.setting.PreferenceActivitySetting;
-import com.may.ple.android.activity.utils.handler.ErrorHandler;
 
 public class LoginActivity extends SherlockActivity implements OnClickListener, RestfulCallback {
-	private Integer selectedGate;
 	private ProgressDialogSpinner spinner;
 	
     @Override
@@ -44,12 +41,6 @@ public class LoginActivity extends SherlockActivity implements OnClickListener, 
     
     @Override
 	public void onClick(View v) {
-    	
-    	if(selectedGate == null) {
-    		Toast.makeText(this, getString(R.string.please_select_gate), Toast.LENGTH_SHORT).show();
-    		return;
-    	}
-    	
     	String username = ((EditText)findViewById(R.id.user_name)).getText().toString().trim();
     	String password = ((EditText)findViewById(R.id.password)).getText().toString().trim();
     	
@@ -63,21 +54,8 @@ public class LoginActivity extends SherlockActivity implements OnClickListener, 
     	}
     	
     	spinner.show();
-    	new CenterService(this, this).login(username, password, "/user");
+    	new CenterService(this).login(username, password, "/user", this);
 	}
-    
-    public void onRadioButtonClicked(View view) {
-        boolean checked = ((RadioButton)view).isChecked();
-        
-        switch(view.getId()) {
-            case R.id.checkIn:
-                if (checked) selectedGate = 1;
-                break;
-            case R.id.checkOut:
-                if (checked) selectedGate = 2;
-                break;
-        }
-    }
     
     
     public static class SettingsActionProvider extends ActionProvider {
@@ -111,20 +89,15 @@ public class LoginActivity extends SherlockActivity implements OnClickListener, 
 		try {
 			LoginCriteriaResp resp = (LoginCriteriaResp)result;
 			
-			if(resp.statusCode != 9999 || !resp.authenticated) {
+			/*if(resp.statusCode != 9999 || !resp.authenticated) {
 				new ErrorHandler(this).handler(resp);
 				return;
-			}
+			}*/
 			
 			TelephonyManager telMrg = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
 			ApplicationScope.getInstance().deviceId = telMrg.getDeviceId();
 			
-	    	Intent intent = null;
-	    	if(selectedGate == 1) {
-	    		intent = new Intent(this, GateInActivity.class);
-	    	} else if(selectedGate == 2) {
-	    		intent = new Intent(this, GateOutActivity.class);    		
-	    	}
+			Intent intent = new Intent(this, GateOutActivity.class);    		
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 	    	startActivity(intent);
 	    	overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);

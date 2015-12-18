@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="action_bar_text_color_1">#FFACACAD</color>
+    <color name="background">#323232</color>
+    <color name="even">#FFFFFF</color>
+    <color name="odd">#eeeeee</color>  
 </resources>

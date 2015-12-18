@@ -10,12 +10,5 @@
             android:key="setting.connection.parking.center.port"
             android:title="port" />
 
-        <!-- android:summary="http://192.168.1.100:8080/jsfproject/rest" -->
-        <!-- android:summary="ws://192.168.1.100:8787" -->
-    </PreferenceCategory>
-    <PreferenceCategory android:title="GATE DETAIL">
-		<EditTextPreference
-            android:key="setting.gate.name"
-            android:title="gate name" />
     </PreferenceCategory>
 </PreferenceScreen>

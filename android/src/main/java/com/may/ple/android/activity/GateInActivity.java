@@ -45,9 +45,9 @@ public class GateInActivity extends SherlockActivity implements OnLongClickListe
         
         Button delete = (Button)findViewById(R.id.delete);
         delete.setOnLongClickListener(this);
-        service = new CenterService(this, this);
+        service = new CenterService(this);
         SharedPreferences setting = PreferenceManager.getDefaultSharedPreferences(this);
-        gateName = setting.getString(SettingKey.gateName, null);
+//        gateName = setting.getString(SettingKey.gateName, null);
     }
 	
 	public void onClick(View view) {
@@ -86,7 +86,7 @@ public class GateInActivity extends SherlockActivity implements OnLongClickListe
 			req.deviceId = ApplicationScope.getInstance().deviceId;
 			req.gateName = gateName;
 			
-			service.send(1, req, VehicleSaveCriteriaResp.class, "/restAct/vehicle/saveVehicleParking", HttpMethod.POST);
+			service.send(1, req, VehicleSaveCriteriaResp.class, "/restAct/vehicle/saveVehicleParking", HttpMethod.POST, this);
 			spinner.show();
 		} else {
 			licenseNo = "";

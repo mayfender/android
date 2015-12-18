@@ -39,11 +39,11 @@ public class GateOutActivity extends SherlockActivity implements RestfulCallback
 		setContentView(R.layout.gate_out);
 		View type = findViewById(R.id.type);
 		registerForContextMenu(type);
-		service = new CenterService(this, this);
+		service = new CenterService(this);
 		spinner = new ProgressDialogSpinner(this);
 		
 		SharedPreferences setting = PreferenceManager.getDefaultSharedPreferences(this);
-        gateName = setting.getString(SettingKey.gateName, null);
+//        gateName = setting.getString(SettingKey.gateName, null);
 	}
 	
 	@Override
@@ -86,7 +86,7 @@ public class GateOutActivity extends SherlockActivity implements RestfulCallback
                 req.gateName = gateName;
                 
     			service.passedParam = req;
-    			service.send(1, req, VehicleCheckOutCriteriaResp.class, "/restAct/vehicle/checkOutVehicle", HttpMethod.POST);
+    			service.send(1, req, VehicleCheckOutCriteriaResp.class, "/restAct/vehicle/checkOutVehicle", HttpMethod.POST, this);
     			spinner.show();
             }
         } 

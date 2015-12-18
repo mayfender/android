@@ -19,16 +19,13 @@ public class PreferenceFragmentSetting extends PreferenceFragment implements OnP
 		addPreferencesFromResource(R.xml.preference_setting);
 		EditTextPreference parkingCenterIp = (EditTextPreference)findPreference(SettingKey.parkingCenterIp);
 		EditTextPreference parkingCenterPort = (EditTextPreference)findPreference(SettingKey.parkingCenterPort);
-		EditTextPreference gateName = (EditTextPreference)findPreference(SettingKey.gateName);
 		
 		SharedPreferences setting = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		parkingCenterIp.setSummary(setting.getString(SettingKey.parkingCenterIp, null));
 		parkingCenterPort.setSummary(setting.getString(SettingKey.parkingCenterPort, null));
-		gateName.setSummary(setting.getString(SettingKey.gateName, null));
 		
 		parkingCenterIp.setOnPreferenceChangeListener(this);
 		parkingCenterPort.setOnPreferenceChangeListener(this);
-		gateName.setOnPreferenceChangeListener(this);
 	}
 
 	@Override

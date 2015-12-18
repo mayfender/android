@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.widget.Toast;
 
 import com.may.ple.android.activity.ApplicationScope;
 import com.may.ple.android.activity.criteria.CommonCriteriaResp;
@@ -31,24 +30,24 @@ public class CenterService {
 	public Object passedParam;
 	private Context context;
 	private RestTemplate restTemplate;
-	private RestfulCallback callback;
-	private String ip;
-	private String port;
 	private String contextUrl;
 	
-	public CenterService(Context context, RestfulCallback callback) {
+	public CenterService(Context context) {
 		this.context = context;	
-		this.callback = callback;
 		init();
 	}
 	
-	private void init() {
+	public void reloadSetting() {
 		SharedPreferences setting = PreferenceManager.getDefaultSharedPreferences(context);
-		ip = setting.getString(SettingKey.parkingCenterIp, "");
-		port = setting.getString(SettingKey.parkingCenterPort, "");
+		String ip = setting.getString(SettingKey.parkingCenterIp, "");
+		String port = setting.getString(SettingKey.parkingCenterPort, "");
+		contextUrl = "http://" + ip + ":" + port + "/backend";
+	}
+	
+	private void init() {
+		reloadSetting();
 		restTemplate = new RestTemplate();
 		ClientHttpRequestFactory factory = restTemplate.getRequestFactory();
-		contextUrl = "http://" + ip + ":" + port + "/backend";
 		
 		if (factory instanceof SimpleClientHttpRequestFactory) {
 			SimpleClientHttpRequestFactory simpleFactory = (SimpleClientHttpRequestFactory)restTemplate.getRequestFactory();
@@ -61,7 +60,7 @@ public class CenterService {
 		}
 	}
 	
-	public void login(String username, String password, String uri) {
+	public void login(String username, String password, String uri, final RestfulCallback callback) {
 		final String url = this.contextUrl + uri;
 		
 		new AsyncTask<String, Void, LoginCriteriaResp>() {
@@ -97,7 +96,37 @@ public class CenterService {
 		}.execute(username, password);
 	}
 	
-	public <R, T extends CommonCriteriaResp> void send(final int id, final R reqType, final Class<T> respType, String uri, final HttpMethod method) {
+	public void logout() {
+		final String url = this.contextUrl + "/logout";
+		
+		new AsyncTask<Void, Void, String>() {
+
+			@Override
+			protected String doInBackground(Void... params) {
+				try {
+					HttpHeaders requestHeaders = new HttpHeaders();
+					requestHeaders.add("Cookie", "JSESSIONID=" + ApplicationScope.getInstance().jsessionid);
+					requestHeaders.setAccept(Collections.singletonList(new MediaType("application","json")));
+					HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
+					ResponseEntity<String> respEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
+					return respEntity.getBody();
+				} catch (ResourceAccessException r) {
+					return "error";
+				} catch (HttpClientErrorException h) {
+					return "error";
+				} catch (Exception e) {
+					return "error";
+				} 
+			}
+			
+			protected void onPostExecute(String result) {
+				
+			};
+			
+		}.execute();
+	}
+	
+	public <R, T extends CommonCriteriaResp> void send(final int id, final R reqType, final Class<T> respType, String uri, final HttpMethod method, final RestfulCallback callback) {
 		final String url = this.contextUrl + uri;
 		
 		new AsyncTask<String, Void, T>() {
@@ -130,8 +159,9 @@ public class CenterService {
 					}
 				} catch (Exception e) {
 					try {
-						Toast.makeText(context, "Gateway App Error: " +e.getMessage(), Toast.LENGTH_SHORT).show();
-						return null;
+						T t = respType.newInstance();
+						t.statusCode = 1000;						
+						return t;
 					} catch (Exception e2) {
 						return null;
 					}

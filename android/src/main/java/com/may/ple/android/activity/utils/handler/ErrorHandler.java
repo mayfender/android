@@ -32,7 +32,9 @@ public class ErrorHandler {
 		}else if(resp.statusCode == 404) {
 			Toast.makeText(context, "Not Found Server", Toast.LENGTH_SHORT).show();
 		}else if(resp.statusCode == 1000) {
-			Toast.makeText(context, "Parking Center Error", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "Center Error", Toast.LENGTH_SHORT).show();
+		}else if(resp.statusCode == 1001) {
+			Toast.makeText(context, "Internal Error", Toast.LENGTH_SHORT).show();			
 		}else if(resp.statusCode == 3000) {
 			Toast.makeText(context, "ไม่พบข้อมูล", Toast.LENGTH_SHORT).show();
 		}else{

@@ -3,12 +3,19 @@
     <string name="app_name">Restaurant</string>
     <string name="action_settings">Settings</string>
     <string name="tryAgain">ลองใหม่อีกครั้ง</string>
+    <string name="amount">จำนวน</string>
+    <string name="table">โต๊ะ</string>
+    <string name="ref">รหัสอ้างอิง</string>
+    <string name="order">สั่งอาหาร</string>
+    <string name="close">ปิด</string>
+    <string name="instruction">ข้อมูลการใช้งาน</string>
     
     <!-- message -->
     <string name="please_select_gate">กรุณาเลือก Gate</string>
     <string name="please_fill_username">กรุณากรอก ชื่อผู้ใช้</string>
     <string name="please_fill_password">กรุณากรอก รหัสผ่าน</string>
 	<string name="standard">Standard</string>
+	<string name="instruction_detail">\t\tรหัสอ้างอิง คือ สิ่งที่ใช้ระบุตัวตนลูกค้า (เช่น ชื่อ หมายเลขโทรศัพท์ เป็นต้น) ฉะนั้นทุกครั้งที่ลูกค้าสั่งอาหาร ลูกค้าจำเป็นต้องไส่ รหัสอิง ให้เหมือนกัน</string>
     
     <string-array name="jazzy_effects">
         <item>@string/standard</item>

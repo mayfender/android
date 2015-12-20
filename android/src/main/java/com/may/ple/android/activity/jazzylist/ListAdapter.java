@@ -17,20 +17,38 @@ package com.may.ple.android.activity.jazzylist;
 
 import java.util.List;
 
+import org.springframework.http.HttpMethod;
+
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.may.ple.android.activity.FragmentTabsPager;
 import com.may.ple.android.activity.R;
+import com.may.ple.android.activity.criteria.CommonCriteriaResp;
 import com.may.ple.android.activity.criteria.Menu;
+import com.may.ple.android.activity.criteria.OrderSaveCriteriaReq;
+import com.may.ple.android.activity.dialog.ProgressDialogSpinner;
+import com.may.ple.android.activity.service.CenterService;
+import com.may.ple.android.activity.service.RestfulCallback;
+import com.may.ple.android.activity.utils.handler.ErrorHandler;
 
 public class ListAdapter extends ArrayAdapter<Menu> {
 
@@ -38,28 +56,140 @@ public class ListAdapter extends ArrayAdapter<Menu> {
     private final Resources res;
     private final int itemLayoutRes;
     private List<Menu> menus;
+    private final ProgressDialogSpinner spinner;
     
     public ListAdapter(Context context, int itemLayoutRes, List<Menu> menus) {
         super(context, itemLayoutRes, R.id.text, menus);
         inflater = LayoutInflater.from(context);
         res = context.getResources();
         this.itemLayoutRes = itemLayoutRes;
-        this.menus = menus;
+        this.menus = menus;   
+        spinner = new ProgressDialogSpinner(getContext());
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-
+        Menu menu = menus.get(position);
+        
         if (convertView == null) {
             convertView = inflater.inflate(itemLayoutRes, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
+            
+            holder.view.setOnLongClickListener(new OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View v) {
+					final Menu m = menus.get(v.getId());
+					
+					View view = inflater.inflate(R.layout.alert_dialog_order, null);
+					ImageView img = (ImageView)view.findViewById(R.id.image);
+					TextView name = (TextView)view.findViewById(R.id.name);
+					name.setText(m.name + " " + String.format("%.2f", m.price) + "-");
+					final TextView amount = (TextView)view.findViewById(R.id.amount);
+					amount.setText("1");
+					
+					final EditText tableName = (EditText)view.findViewById(R.id.tableName);
+					final EditText ref = (EditText)view.findViewById(R.id.ref);
+					
+					if(m.image.imageContentBase64 != null) {
+						byte[] decodedString = Base64.decode(m.image.imageContentBase64, Base64.DEFAULT);        	
+						Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+						img.setImageBitmap(decodedByte);						
+					} else {
+						Bitmap noImg = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.no_image_available);
+			        	img.setImageBitmap(noImg);
+					}
+					
+					SeekBar seekAmount = (SeekBar) view.findViewById(R.id.seekAmount);
+					seekAmount.setProgress(0);
+					seekAmount.setMax(9);
+					seekAmount.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+						
+						public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
+							amount.setText("" + (progress + 1));
+						}
+
+						public void onStartTrackingTouch(SeekBar seekBar) {
+							// TODO Auto-generated method stub
+						}
+
+						public void onStopTrackingTouch(SeekBar seekBar) {
+							// TODO Auto-generated method stub							
+						}
+					});
+					
+			        
+					final AlertDialog dialog = new AlertDialog.Builder(getContext())
+			        .setCancelable(false)
+			        .setView(view)
+			        .setPositiveButton(getContext().getResources().getText(R.string.order), new OnClickListener() {
+			            public void onClick(DialogInterface dialog, int which) {
+			            	
+			            }
+			        })
+			        .setNegativeButton(getContext().getResources().getText(R.string.close), new OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							
+						}
+					}).show();
+					
+					Button positiveBtn = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+					positiveBtn.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							if(tableName.getText().toString() == null || tableName.getText().toString().trim().equals("")) {
+								Toast.makeText(getContext(), "กรุณากรอกชื่อโต๊ะ", Toast.LENGTH_SHORT).show();		
+								return;
+							} else if(ref.getText().toString() == null || ref.getText().toString().trim().equals("")) {
+								Toast.makeText(getContext(), "กรุณากรอกรหัสอ้างอิง", Toast.LENGTH_SHORT).show();																
+								return;
+							}
+							
+							//-----------------------------------------------------------
+							OrderSaveCriteriaReq req = new OrderSaveCriteriaReq();
+							req.menuId = m.id;
+							req.tableName = tableName.getText().toString().trim();
+							req.ref = ref.getText().toString().trim();
+							req.amount = Integer.parseInt(amount.getText().toString());
+//							req.comment;
+							req.isTakeHome = false;
+							spinner.show();
+							
+							new CenterService(getContext()).send(0, req, CommonCriteriaResp.class, "/restAct/order/saveOrder", HttpMethod.POST, new RestfulCallback() {
+								@Override
+								public void onComplete(int id, Object result, Object passedParam) {	
+									try {
+										CommonCriteriaResp resp = (CommonCriteriaResp)result;
+										
+										if(resp.statusCode != 9999) {
+											spinner.dismiss();
+											new ErrorHandler(getContext()).handler(resp);
+											return;
+										}
+										
+										String msg = amount.getText().toString() + " " + tableName.getText().toString() + " " + ref.getText().toString() + " " + m.id;
+										Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+									} catch (Exception e) {
+										
+									} finally {
+										spinner.dismiss();
+										dialog.dismiss();
+									}
+								}
+							});
+						}
+					});
+					
+					return false;
+				}
+			});
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        Menu menu = menus.get(position);
+        
         
         if(menu.image.imageContentBase64 != null) {
         	byte[] decodedString = Base64.decode(menu.image.imageContentBase64, Base64.DEFAULT);        	
@@ -76,6 +206,7 @@ public class ListAdapter extends ArrayAdapter<Menu> {
         	holder.imgRecomm.setVisibility(View.GONE);        	
         }
         
+        holder.view.setId(position);
         holder.view.setBackgroundColor(res.getColor(Utils.getBackgroundColorRes(position, itemLayoutRes)));
         holder.text.setText(menu.name + " " + String.format("%.2f", menu.price) + "-");
 

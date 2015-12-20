@@ -1,5 +1,7 @@
 package com.may.ple.android.activity.service;
 
+import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Collections;
 
 import org.springframework.http.HttpAuthentication;
@@ -137,7 +139,12 @@ public class CenterService {
 					
 					HttpHeaders requestHeaders = new HttpHeaders();
 					requestHeaders.add("Cookie", "JSESSIONID=" + ApplicationScope.getInstance().jsessionid);
-					requestHeaders.setAccept(Collections.singletonList(new MediaType("application","json")));
+					requestHeaders.setAccept(
+							Arrays.asList(
+									new MediaType("application","json"), 
+									new MediaType("text","plain", Charset.forName("UTF-8"))
+									)
+							);
 					HttpEntity<?> requestEntity = new HttpEntity<Object>(reqType, requestHeaders);
 					ResponseEntity<T> respEntity = restTemplate.exchange(url, method, requestEntity, respType);
 					return respEntity.getBody();

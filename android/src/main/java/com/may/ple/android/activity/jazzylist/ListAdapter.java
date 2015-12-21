@@ -33,6 +33,7 @@ import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -40,7 +41,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.may.ple.android.activity.FragmentTabsPager;
+import com.may.ple.android.activity.ApplicationScope;
 import com.may.ple.android.activity.R;
 import com.may.ple.android.activity.criteria.CommonCriteriaResp;
 import com.may.ple.android.activity.criteria.Menu;
@@ -57,9 +58,11 @@ public class ListAdapter extends ArrayAdapter<Menu> {
     private final int itemLayoutRes;
     private List<Menu> menus;
     private final ProgressDialogSpinner spinner;
+    private final ApplicationScope appScope;
     
     public ListAdapter(Context context, int itemLayoutRes, List<Menu> menus) {
         super(context, itemLayoutRes, R.id.text, menus);
+        appScope = ApplicationScope.getInstance();
         inflater = LayoutInflater.from(context);
         res = context.getResources();
         this.itemLayoutRes = itemLayoutRes;
@@ -88,9 +91,19 @@ public class ListAdapter extends ArrayAdapter<Menu> {
 					name.setText(m.name + " " + String.format("%.2f", m.price) + "-");
 					final TextView amount = (TextView)view.findViewById(R.id.amount);
 					amount.setText("1");
+					final CheckBox takeHome = (CheckBox)view.findViewById(R.id.take_home);
+					final EditText comment = (EditText)view.findViewById(R.id.comment);
 					
-					final EditText tableName = (EditText)view.findViewById(R.id.tableName);
 					final EditText ref = (EditText)view.findViewById(R.id.ref);
+					final EditText tableName = (EditText)view.findViewById(R.id.tableName);					
+					tableName.setOnLongClickListener(new OnLongClickListener() {
+						@Override
+						public boolean onLongClick(View v) {
+							tableName.setText(appScope.tableName);
+							ref.setText(appScope.ref);
+							return false;
+						}
+					});
 					
 					if(m.image.imageContentBase64 != null) {
 						byte[] decodedString = Base64.decode(m.image.imageContentBase64, Base64.DEFAULT);        	
@@ -153,8 +166,12 @@ public class ListAdapter extends ArrayAdapter<Menu> {
 							req.tableName = tableName.getText().toString().trim();
 							req.ref = ref.getText().toString().trim();
 							req.amount = Integer.parseInt(amount.getText().toString());
-//							req.comment;
-							req.isTakeHome = false;
+							req.comment = comment.getText().toString().trim();
+							req.isTakeHome = takeHome.isChecked();
+							
+							appScope.tableName = req.tableName;
+							appScope.ref = req.ref;
+							
 							spinner.show();
 							
 							new CenterService(getContext()).send(0, req, CommonCriteriaResp.class, "/restAct/order/saveOrder", HttpMethod.POST, new RestfulCallback() {
@@ -169,8 +186,7 @@ public class ListAdapter extends ArrayAdapter<Menu> {
 											return;
 										}
 										
-										String msg = amount.getText().toString() + " " + tableName.getText().toString() + " " + ref.getText().toString() + " " + m.id;
-										Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+										Toast.makeText(getContext(), getContext().getResources().getText(R.string.order_success), Toast.LENGTH_SHORT).show();
 									} catch (Exception e) {
 										
 									} finally {

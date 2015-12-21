@@ -1,10 +1,14 @@
 package com.may.ple.android.activity.utils.handler;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.widget.Toast;
 
+import com.may.ple.android.activity.FragmentTabsPager;
 import com.may.ple.android.activity.LoginActivity;
+import com.may.ple.android.activity.R;
 import com.may.ple.android.activity.criteria.CommonCriteriaResp;
 
 public class ErrorHandler {
@@ -23,11 +27,20 @@ public class ErrorHandler {
 			if(context instanceof LoginActivity) {
 				Toast.makeText(context, "ข้อมูลไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง", Toast.LENGTH_SHORT).show();				
 			} else {
-				Toast.makeText(context, "Session Timeout", Toast.LENGTH_SHORT).show();	
-				
-				Intent intent = new Intent(context, LoginActivity.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-		    	context.startActivity(intent);
+				new AlertDialog.Builder(context)
+	  	        .setIcon(android.R.drawable.ic_dialog_alert)
+	  	        .setTitle(R.string.session_timeout_title)
+	  	        .setMessage(R.string.session_timeout_msg)
+	  	        .setPositiveButton(R.string.ok_btn, new DialogInterface.OnClickListener() {
+
+	  	            @Override
+	  	            public void onClick(DialogInterface dialog, int which) {
+	  	            	Intent intent = new Intent(context, FragmentTabsPager.class);
+	  					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+	  			    	context.startActivity(intent);
+	  	            }
+	  	        })
+	  	        .show();
 			}
 		}else if(resp.statusCode == 404) {
 			Toast.makeText(context, "Not Found Server", Toast.LENGTH_SHORT).show();

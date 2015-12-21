@@ -8,6 +8,8 @@ public class ApplicationScope extends Application {
 	public int connTimeout = 10000;
 	public int readTimeout = 10000;
 	public String deviceId;
+	public String tableName;
+	public String ref;
 	
 	@Override
 	public void onCreate() {

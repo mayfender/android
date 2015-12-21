@@ -9,13 +9,22 @@
     <string name="order">สั่งอาหาร</string>
     <string name="close">ปิด</string>
     <string name="instruction">ข้อมูลการใช้งาน</string>
+    <string name="comment">comment</string>
+    <string name="take_home">สั่งกลับบ้าน</string>
+    <string name="ok_btn">ตกลง</string>
+    <string name="cancel_btn">ยกเลิก</string>
     
     <!-- message -->
     <string name="please_select_gate">กรุณาเลือก Gate</string>
     <string name="please_fill_username">กรุณากรอก ชื่อผู้ใช้</string>
     <string name="please_fill_password">กรุณากรอก รหัสผ่าน</string>
 	<string name="standard">Standard</string>
-	<string name="instruction_detail">\t\tรหัสอ้างอิง คือ สิ่งที่ใช้ระบุตัวตนลูกค้า (เช่น ชื่อ หมายเลขโทรศัพท์ เป็นต้น) ฉะนั้นทุกครั้งที่ลูกค้าสั่งอาหาร ลูกค้าจำเป็นต้องไส่ รหัสอิง ให้เหมือนกัน</string>
+	<string name="order_success">ดำเนินการสำเร็จ</string>
+	<string name="exit_app_title">ออกจากโปรแกรม</string>
+	<string name="exit_app_msg">ยืนยันต้องการออกจากโปรแกรม</string>
+	<string name="session_timeout_title">Session Timeout</string>
+	<string name="session_timeout_msg">การดำเนินการไม่สำเร็จ กรุณาลองใหม่อีกครั้ง</string>
+	<string name="instruction_detail">\t\tรหัสอ้างอิง คือ สิ่งที่ใช้ระบุตัวตนลูกค้าและไม่ซ้ำกับลูกค้าคนอื่น (เช่น หมายเลขโทรศัพท์ เป็นต้น) ฉะนั้นทุกครั้งที่ลูกค้าสั่งอาหาร ลูกค้าจำเป็นต้องไส่ รหัสอ้างอิง เดิมทุกครั้ง</string>
     
     <string-array name="jazzy_effects">
         <item>@string/standard</item>

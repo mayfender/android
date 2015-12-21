@@ -21,7 +21,9 @@ import java.util.Set;
 
 import org.springframework.http.HttpMethod;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -29,6 +31,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.telephony.TelephonyManager;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -65,11 +68,13 @@ public class FragmentTabsPager extends SherlockFragmentActivity implements Restf
 	private Bundle savedInstanceState;
 	private CenterService service;
 	private RestfulCallback loginCallBack;
+	private ApplicationScope appScope;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.savedInstanceState = savedInstanceState;
+        appScope = ApplicationScope.getInstance();
         
         setContentView(R.layout.fragment_tabs_pager);
         
@@ -332,5 +337,29 @@ public class FragmentTabsPager extends SherlockFragmentActivity implements Restf
               return view;
           }
       }
+  	
+  	@Override
+  	public boolean onKeyDown(int keyCode, KeyEvent event) {
+  	    if(keyCode == KeyEvent.KEYCODE_BACK) {
+  	        new AlertDialog.Builder(this)
+  	        .setIcon(android.R.drawable.ic_dialog_alert)
+  	        .setTitle(R.string.exit_app_title)
+  	        .setMessage(R.string.exit_app_msg)
+  	        .setPositiveButton(R.string.ok_btn, new DialogInterface.OnClickListener() {
+  	            @Override
+  	            public void onClick(DialogInterface dialog, int which) {
+  	            	appScope.tableName = null;
+  	            	appScope.ref = null;
+  	                finish();    
+  	            }
+  	        })
+  	        .setNegativeButton(R.string.cancel_btn, null)
+  	        .show();
+
+  	        return true;
+  	    } else {
+  	        return super.onKeyDown(keyCode, event);
+  	    }
+  	}
     
 }

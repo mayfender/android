@@ -104,6 +104,14 @@ public class ListAdapter extends ArrayAdapter<Menu> {
 							return false;
 						}
 					});
+					ref.setOnLongClickListener(new OnLongClickListener() {
+						@Override
+						public boolean onLongClick(View v) {
+							tableName.setText(appScope.tableName);
+							ref.setText(appScope.ref);
+							return false;
+						}
+					});
 					
 					if(m.image.imageContentBase64 != null) {
 						byte[] decodedString = Base64.decode(m.image.imageContentBase64, Base64.DEFAULT);        	

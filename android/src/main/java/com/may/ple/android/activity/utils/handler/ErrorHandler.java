@@ -19,10 +19,12 @@ public class ErrorHandler {
 	}
 
 	public void handler(CommonCriteriaResp resp) {
+		String msg = "";
+		
 		if(resp == null) {
-			Toast.makeText(context, "Response is null", Toast.LENGTH_SHORT).show();
+			msg = "Response is null";
 		}else if(resp.statusCode == 5000) {
-			Toast.makeText(context, "ไม่สามารถเชื่อมต่อกับข้อมูลกลางได้", Toast.LENGTH_SHORT).show();
+			msg = "ไม่สามารถเชื่อมต่อกับข้อมูลกลางได้";
 		}else if(resp.statusCode == 401) {
 			if(context instanceof LoginActivity) {
 				Toast.makeText(context, "ข้อมูลไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง", Toast.LENGTH_SHORT).show();				
@@ -41,18 +43,34 @@ public class ErrorHandler {
 	  	            }
 	  	        })
 	  	        .show();
+				return;
 			}
 		}else if(resp.statusCode == 404) {
 			Toast.makeText(context, "Not Found Server", Toast.LENGTH_SHORT).show();
+			msg = "Not Found Server";
 		}else if(resp.statusCode == 1000) {
-			Toast.makeText(context, "Center Error", Toast.LENGTH_SHORT).show();
+			msg = "Center Error";
 		}else if(resp.statusCode == 1001) {
-			Toast.makeText(context, "Internal Error", Toast.LENGTH_SHORT).show();			
+			msg = "Internal Error";
 		}else if(resp.statusCode == 3000) {
-			Toast.makeText(context, "ไม่พบข้อมูล", Toast.LENGTH_SHORT).show();
+			msg = "ไม่พบข้อมูล";
 		}else{
-			Toast.makeText(context, "Error code: " + resp.statusCode, Toast.LENGTH_SHORT).show();
+			msg = "Error code: " + resp.statusCode;
 		}		
+		
+		
+		new AlertDialog.Builder(context)
+	        .setIcon(android.R.drawable.ic_dialog_alert)
+	        .setTitle("Error!!!")
+	        .setMessage(msg)
+	        .setPositiveButton(R.string.ok_btn, new DialogInterface.OnClickListener() {
+	            @Override
+	            public void onClick(DialogInterface dialog, int which) {
+	            	
+	            }
+	        }).show();
+		
+		
 	}
 	
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Restaurant</string>
+    <string name="app_name">OK Drink</string>
     <string name="action_settings">Settings</string>
     <string name="tryAgain">ลองใหม่อีกครั้ง</string>
     <string name="amount">จำนวน</string>

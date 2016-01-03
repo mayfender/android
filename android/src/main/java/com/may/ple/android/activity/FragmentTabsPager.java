@@ -46,7 +46,6 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.ActionProvider;
 import com.actionbarsherlock.view.Menu;
 import com.may.ple.android.activity.criteria.LoadDataCriteriaResp;
-import com.may.ple.android.activity.criteria.LoginCriteriaResp;
 import com.may.ple.android.activity.dialog.ProgressDialogSpinner;
 import com.may.ple.android.activity.service.CenterService;
 import com.may.ple.android.activity.service.RestfulCallback;
@@ -67,7 +66,6 @@ public class FragmentTabsPager extends SherlockFragmentActivity implements Restf
 	private boolean isLoginError;
 	private Bundle savedInstanceState;
 	private CenterService service;
-	private RestfulCallback loginCallBack;
 	private ApplicationScope appScope;
 	
     @Override
@@ -84,48 +82,8 @@ public class FragmentTabsPager extends SherlockFragmentActivity implements Restf
         spinner = new ProgressDialogSpinner(this);
         spinner.show();
         
-        loginCallBack = new RestfulCallback() {
-			@Override
-			public void onComplete(int id, Object result, final Object passedParam) {
-				try {
-					LoginCriteriaResp resp = (LoginCriteriaResp)result;
-					
-					if(resp.statusCode != 9999 || !resp.principal.authenticated) {
-						
-						optionErrorLogin(true);
-						
-						tryConn.setOnClickListener(new OnClickListener() {
-							@Override
-							public void onClick(View v) {
-								optionErrorLogin(false);
-								
-								spinner.show();
-								service.reloadSetting();
-								service.login("client", "client", "/user", (RestfulCallback)passedParam);													
-							}
-						});
-						
-						spinner.dismiss();
-						new ErrorHandler(FragmentTabsPager.this).handler(resp);
-						return;
-					}
-					
-					// Get and set deviceId to application scope.
-					TelephonyManager telMrg = (TelephonyManager)FragmentTabsPager.this.getSystemService(Context.TELEPHONY_SERVICE);
-					ApplicationScope.getInstance().deviceId = telMrg.getDeviceId();
-					
-					//---: Check data version with server.
-					service.send(2, null, LoadDataCriteriaResp.class, "/restAct/loadData/load", HttpMethod.GET, FragmentTabsPager.this);
-				} catch (Exception e) {
-					spinner.dismiss();
-					Toast.makeText(FragmentTabsPager.this, e.toString(), Toast.LENGTH_SHORT).show();
-				}
-			}
-		};
-        
         service = new CenterService(this);
-        service.passedParam = loginCallBack;
-        service.login("client", "client", "/user", loginCallBack);
+        service.send(2, null, LoadDataCriteriaResp.class, "/restAct/loadData/load", HttpMethod.GET, FragmentTabsPager.this);
     }
 
     @Override
@@ -137,15 +95,14 @@ public class FragmentTabsPager extends SherlockFragmentActivity implements Restf
 				if(resp.statusCode != 9999) {					
 					optionErrorLogin(true);
 					
-					service.logout();
-					
 					tryConn.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
 							optionErrorLogin(false);
+							service.reloadSetting();
 							
 							spinner.show();
-							service.login("client", "client", "/user", loginCallBack);													
+							service.send(2, null, LoadDataCriteriaResp.class, "/restAct/loadData/load", HttpMethod.GET, FragmentTabsPager.this);											
 						}
 					});
 					
@@ -154,6 +111,9 @@ public class FragmentTabsPager extends SherlockFragmentActivity implements Restf
 					if (savedInstanceState != null) {
 						mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
 					}
+					
+					TelephonyManager telMrg = (TelephonyManager)FragmentTabsPager.this.getSystemService(Context.TELEPHONY_SERVICE);
+					ApplicationScope.getInstance().deviceId = telMrg.getDeviceId();
 					
 					mViewPager = (ViewPager)findViewById(R.id.pager);
 					mTabsAdapter = new TabsAdapter(this, mTabHost, mViewPager);

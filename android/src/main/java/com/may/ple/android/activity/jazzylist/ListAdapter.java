@@ -15,6 +15,7 @@
  */
 package com.may.ple.android.activity.jazzylist;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpMethod;
@@ -34,8 +35,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -46,6 +50,7 @@ import com.may.ple.android.activity.R;
 import com.may.ple.android.activity.criteria.CommonCriteriaResp;
 import com.may.ple.android.activity.criteria.Menu;
 import com.may.ple.android.activity.criteria.OrderSaveCriteriaReq;
+import com.may.ple.android.activity.criteria.SubMenu;
 import com.may.ple.android.activity.dialog.ProgressDialogSpinner;
 import com.may.ple.android.activity.service.CenterService;
 import com.may.ple.android.activity.service.RestfulCallback;
@@ -59,6 +64,7 @@ public class ListAdapter extends ArrayAdapter<Menu> {
     private List<Menu> menus;
     private final ProgressDialogSpinner spinner;
     private final ApplicationScope appScope;
+    private List<SubMenu> subMenus;
     
     public ListAdapter(Context context, int itemLayoutRes, List<Menu> menus) {
         super(context, itemLayoutRes, R.id.text, menus);
@@ -80,12 +86,13 @@ public class ListAdapter extends ArrayAdapter<Menu> {
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
             
-            holder.view.setOnLongClickListener(new OnLongClickListener() {
+            holder.view.setOnClickListener(new View.OnClickListener() {
 				@Override
-				public boolean onLongClick(View v) {
+				public void onClick(View v) {
 					final Menu m = menus.get(v.getId());
+					subMenus = new ArrayList<>();
 					
-					View view = inflater.inflate(R.layout.alert_dialog_order, null);
+					final View view = inflater.inflate(R.layout.alert_dialog_order, null);
 					ImageView img = (ImageView)view.findViewById(R.id.image);
 					TextView name = (TextView)view.findViewById(R.id.name);
 					name.setText(m.name + " " + String.format("%.2f", m.price) + "-");
@@ -95,7 +102,47 @@ public class ListAdapter extends ArrayAdapter<Menu> {
 					final EditText comment = (EditText)view.findViewById(R.id.comment);
 					
 					final EditText ref = (EditText)view.findViewById(R.id.ref);
-					final EditText tableName = (EditText)view.findViewById(R.id.tableName);					
+					final EditText tableName = (EditText)view.findViewById(R.id.tableName);		
+					
+					//------
+					LinearLayout subMenuLayout1 = (LinearLayout)view.findViewById(R.id.subMenu);
+					LinearLayout subMenuLayout2 = null;
+					CheckBox checkBox;
+					SubMenu subMenu;
+					
+					for (int i = 0; i < m.subMenus.size(); i++) {
+						subMenuLayout2 = (LinearLayout)inflater.inflate(R.layout.sub_menu_layout, null);							
+						subMenuLayout1.addView(subMenuLayout2);
+						
+						subMenu = m.subMenus.get(i);
+						
+						final LinearLayout subMenuLayout3 = (LinearLayout)inflater.inflate(R.layout.sub_menu, null);	
+						checkBox = (CheckBox)subMenuLayout3.findViewById(R.id.text);
+						checkBox.setId(i);
+						
+						checkBox.setText(String.format(subMenu.name + " %.2f", subMenu.price) + "-");
+						subMenuLayout2.addView(subMenuLayout3);
+						
+						checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+							@Override
+							public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+								EditText amount = (EditText)subMenuLayout3.findViewById(R.id.amount);
+								SubMenu sm = m.subMenus.get(buttonView.getId());
+								amount.setTag(sm.id);
+								
+								if(isChecked) {
+									amount.setText("");
+									amount.setVisibility(View.VISIBLE);
+									subMenus.add(sm);
+								} else {
+									amount.setVisibility(View.GONE);
+									subMenus.remove(sm);
+								}
+							}
+						});
+					}
+					//--------
+					
 					tableName.setOnLongClickListener(new OnLongClickListener() {
 						@Override
 						public boolean onLongClick(View v) {
@@ -169,6 +216,21 @@ public class ListAdapter extends ArrayAdapter<Menu> {
 							}
 							
 							//-----------------------------------------------------------
+							LinearLayout subMenuLayout1 = (LinearLayout)view.findViewById(R.id.subMenu);
+							SubMenu sm;
+							String subAmount;
+							
+							for (int i = 0; i < subMenus.size(); i++) {
+								sm = subMenus.get(i);
+								subAmount = ((EditText)subMenuLayout1.findViewWithTag(sm.id)).getText().toString();
+								
+								if(subAmount.equals("")) {
+									sm.amount = 1;
+								} else {
+									sm.amount = Integer.valueOf(subAmount);									
+								}
+							}
+							
 							OrderSaveCriteriaReq req = new OrderSaveCriteriaReq();
 							req.menuId = m.id;
 							req.tableName = tableName.getText().toString().trim();
@@ -176,7 +238,8 @@ public class ListAdapter extends ArrayAdapter<Menu> {
 							req.amount = Integer.parseInt(amount.getText().toString());
 							req.comment = comment.getText().toString().trim();
 							req.isTakeHome = takeHome.isChecked();
-							
+							req.subMenus = subMenus;
+														
 							appScope.tableName = req.tableName;
 							appScope.ref = req.ref;
 							
@@ -204,9 +267,7 @@ public class ListAdapter extends ArrayAdapter<Menu> {
 								}
 							});
 						}
-					});
-					
-					return false;
+					});					
 				}
 			});
         } else {

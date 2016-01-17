@@ -45,7 +45,8 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.ActionProvider;
 import com.actionbarsherlock.view.Menu;
-import com.may.ple.android.activity.criteria.LoadDataCriteriaResp;
+import com.may.ple.android.activity.criteria.GetMenuTypeCriteriaResp;
+import com.may.ple.android.activity.criteria.MenuType;
 import com.may.ple.android.activity.dialog.ProgressDialogSpinner;
 import com.may.ple.android.activity.service.CenterService;
 import com.may.ple.android.activity.service.RestfulCallback;
@@ -83,14 +84,14 @@ public class FragmentTabsPager extends SherlockFragmentActivity implements Restf
         spinner.show();
         
         service = new CenterService(this);
-        service.send(2, null, LoadDataCriteriaResp.class, "/restAct/loadData/load", HttpMethod.GET, FragmentTabsPager.this);
+        service.send(2, null, GetMenuTypeCriteriaResp.class, "/restAct/loadData/getMenuType", HttpMethod.GET, FragmentTabsPager.this);
     }
 
     @Override
 	public void onComplete(int id, Object result, Object passedParam) {
 		try {
 			if(id == 2) {
-				LoadDataCriteriaResp resp = (LoadDataCriteriaResp)result;
+				GetMenuTypeCriteriaResp resp = (GetMenuTypeCriteriaResp)result;
 				
 				if(resp.statusCode != 9999) {					
 					optionErrorLogin(true);
@@ -102,7 +103,7 @@ public class FragmentTabsPager extends SherlockFragmentActivity implements Restf
 							service.reloadSetting();
 							
 							spinner.show();
-							service.send(2, null, LoadDataCriteriaResp.class, "/restAct/loadData/load", HttpMethod.GET, FragmentTabsPager.this);											
+							service.send(2, null, GetMenuTypeCriteriaResp.class, "/restAct/loadData/load", HttpMethod.GET, FragmentTabsPager.this);											
 						}
 					});
 					
@@ -117,11 +118,13 @@ public class FragmentTabsPager extends SherlockFragmentActivity implements Restf
 					
 					mViewPager = (ViewPager)findViewById(R.id.pager);
 					mTabsAdapter = new TabsAdapter(this, mTabHost, mViewPager);
-					Set<String> keySet = resp.menus.keySet();
+					
+					Set<String> keySet = resp.menuTypesMap.keySet();
 					
 					for (String key : keySet) {
-						List<com.may.ple.android.activity.criteria.Menu> menu = resp.menus.get(key);
-						mTabsAdapter.addTab(mTabHost.newTabSpec(key).setIndicator(key), ViewMenuFragment.class, null, menu);
+						List<MenuType> menuTypes = resp.menuTypesMap.get(key);
+						List<com.may.ple.android.activity.criteria.Menu> menus = resp.menusMap.get(key);
+						mTabsAdapter.addTab(mTabHost.newTabSpec(key).setIndicator(key), ViewMenuTypeFragment.class, null, menuTypes, menus, key);
 					}
 				}
 			}
@@ -184,13 +187,17 @@ public class FragmentTabsPager extends SherlockFragmentActivity implements Restf
             private final String tag;
             private final Class<?> clss;
             private final Bundle args;
-            private final List<com.may.ple.android.activity.criteria.Menu> menu;
-
-            TabInfo(String _tag, Class<?> _class, Bundle _args, List<com.may.ple.android.activity.criteria.Menu> _menu) {
+            private final List<MenuType> menuTypes;
+            private final List<com.may.ple.android.activity.criteria.Menu> menus;
+            private final String parentMenuType;
+            
+            TabInfo(String _tag, Class<?> _class, Bundle _args, List<MenuType> _menuTypes, List<com.may.ple.android.activity.criteria.Menu> _menus, String _parentMenuType) {
                 tag = _tag;
                 clss = _class;
                 args = _args;
-                menu = _menu;
+                menuTypes = _menuTypes;
+                menus = _menus;
+                parentMenuType = _parentMenuType;
             }
         }
 
@@ -220,11 +227,11 @@ public class FragmentTabsPager extends SherlockFragmentActivity implements Restf
             mViewPager.setOnPageChangeListener(this);
         }
 
-        public void addTab(TabHost.TabSpec tabSpec, Class<?> clss, Bundle args, List<com.may.ple.android.activity.criteria.Menu> menu) {
+        public void addTab(TabHost.TabSpec tabSpec, Class<?> clss, Bundle args, List<MenuType> menuTypes, List<com.may.ple.android.activity.criteria.Menu> menus, String parentMenuType) {
             tabSpec.setContent(new DummyTabFactory(mContext));
             String tag = tabSpec.getTag();
 
-            TabInfo info = new TabInfo(tag, clss, args, menu);
+            TabInfo info = new TabInfo(tag, clss, args, menuTypes, menus, parentMenuType);
             mTabs.add(info);
             mTabHost.addTab(tabSpec);
             notifyDataSetChanged();
@@ -238,9 +245,11 @@ public class FragmentTabsPager extends SherlockFragmentActivity implements Restf
         @Override
         public Fragment getItem(int position) {
             TabInfo info = mTabs.get(position);
-            ViewMenuFragment viewMenuFragment = (ViewMenuFragment)Fragment.instantiate(mContext, info.clss.getName(), info.args);
-            viewMenuFragment.menus = info.menu;
-            return viewMenuFragment;
+            ViewMenuTypeFragment instantiate = (ViewMenuTypeFragment)Fragment.instantiate(mContext, info.clss.getName(), info.args);
+            instantiate.menuTypes = info.menuTypes;
+            instantiate.menus = info.menus;
+            instantiate.parentMenuType = info.parentMenuType;
+            return instantiate;  
         }
 
         @Override

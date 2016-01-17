@@ -1,8 +1,8 @@
 package com.may.ple.android.activity.criteria;
 
-public class MenuType {
+public class SubMenu {
 	public Long id;
 	public String name;
-	public Boolean isEnabled;
-	public Long parentId;
+	public Double price;
+	public Integer amount;
 }

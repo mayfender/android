@@ -103,7 +103,7 @@ public class FragmentTabsPager extends SherlockFragmentActivity implements Restf
 							service.reloadSetting();
 							
 							spinner.show();
-							service.send(2, null, GetMenuTypeCriteriaResp.class, "/restAct/loadData/load", HttpMethod.GET, FragmentTabsPager.this);											
+							service.send(2, null, GetMenuTypeCriteriaResp.class, "/restAct/loadData/getMenuType", HttpMethod.GET, FragmentTabsPager.this);											
 						}
 					});
 					

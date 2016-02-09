@@ -165,8 +165,9 @@ public class ListAdapter extends ArrayAdapter<Menu> {
 						Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 						img.setImageBitmap(decodedByte);						
 					} else {
-						Bitmap noImg = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.no_image_available);
-			        	img.setImageBitmap(noImg);
+						img.setVisibility(View.GONE);
+//						Bitmap noImg = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.no_image_available);
+//			        	img.setImageBitmap(noImg);
 					}
 					
 					SeekBar seekAmount = (SeekBar) view.findViewById(R.id.seekAmount);
@@ -281,8 +282,9 @@ public class ListAdapter extends ArrayAdapter<Menu> {
         	Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         	holder.img.setImageBitmap(decodedByte);
         }else{
-        	Bitmap noImg = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.no_image_available);
-        	holder.img.setImageBitmap(noImg);
+        	holder.img.setVisibility(View.GONE);
+//        	Bitmap noImg = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.no_image_available);
+//        	holder.img.setImageBitmap(noImg);
         }
         
         if(menu.isRecommented) {

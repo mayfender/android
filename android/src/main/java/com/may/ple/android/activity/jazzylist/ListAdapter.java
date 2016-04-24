@@ -31,6 +31,7 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnLongClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -46,6 +47,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.may.ple.android.activity.ApplicationScope;
+import com.may.ple.android.activity.OrderActivity;
 import com.may.ple.android.activity.R;
 import com.may.ple.android.activity.criteria.CommonCriteriaResp;
 import com.may.ple.android.activity.criteria.Menu;
@@ -65,9 +67,11 @@ public class ListAdapter extends ArrayAdapter<Menu> {
     private final ProgressDialogSpinner spinner;
     private final ApplicationScope appScope;
     private List<SubMenu> subMenus;
+    private Context context;
     
     public ListAdapter(Context context, int itemLayoutRes, List<Menu> menus) {
         super(context, itemLayoutRes, R.id.text, menus);
+        this.context = context;
         appScope = ApplicationScope.getInstance();
         inflater = LayoutInflater.from(context);
         res = context.getResources();
@@ -90,10 +94,11 @@ public class ListAdapter extends ArrayAdapter<Menu> {
 				@Override
 				public void onClick(View v) {
 					final Menu m = menus.get(v.getId());
+					OrderActivity.m = m;
 					subMenus = new ArrayList<>();
 					
 					final View view = inflater.inflate(R.layout.alert_dialog_order, null);
-					ImageView img = (ImageView)view.findViewById(R.id.image);
+					final ImageView img = (ImageView)view.findViewById(R.id.image);
 					TextView name = (TextView)view.findViewById(R.id.name);
 					name.setText(m.name + " " + String.format("%.2f", m.price) + "-");
 					final TextView amount = (TextView)view.findViewById(R.id.amount);
@@ -103,6 +108,15 @@ public class ListAdapter extends ArrayAdapter<Menu> {
 					
 					final EditText ref = (EditText)view.findViewById(R.id.ref);
 					final EditText tableName = (EditText)view.findViewById(R.id.tableName);		
+					
+					img.setOnClickListener(new View.OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+							imm.hideSoftInputFromWindow(img.getWindowToken(), 0);
+						}
+					});
 					
 					//------
 					LinearLayout subMenuLayout1 = (LinearLayout)view.findViewById(R.id.subMenu);
@@ -188,10 +202,18 @@ public class ListAdapter extends ArrayAdapter<Menu> {
 						}
 					});
 					
+					
+					
+//					Intent i = new Intent(context, OrderActivity.class);
+//                  	context.startActivity(i);
+					
+					
+					
 			        
 					final AlertDialog dialog = new AlertDialog.Builder(getContext())
 			        .setCancelable(false)
 			        .setView(view)
+			        
 			        .setPositiveButton(getContext().getResources().getText(R.string.order), new OnClickListener() {
 			            public void onClick(DialogInterface dialog, int which) {
 			            	
@@ -202,7 +224,8 @@ public class ListAdapter extends ArrayAdapter<Menu> {
 						public void onClick(DialogInterface dialog, int which) {
 							
 						}
-					}).show();
+					})
+					.show();
 					
 					Button positiveBtn = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
 					positiveBtn.setOnClickListener(new View.OnClickListener() {
@@ -269,6 +292,14 @@ public class ListAdapter extends ArrayAdapter<Menu> {
 							});
 						}
 					});					
+					
+					
+					
+					
+					
+					
+					
+					
 				}
 			});
         } else {
